@@ -23,7 +23,7 @@ class BaseCharacter {
     var _this = this;
     var i = 1;
 
-    if (damage > 0) {
+    if (damage >= 0) {
     _this.id = setInterval(function(){
       _this.element.getElementsByClassName("effect-image")[0].style.display = "block";
       _this.element.getElementsByClassName("effect-image")[0].src = "images/effect/blade/"+i+".png";
@@ -168,6 +168,7 @@ function finish() {
 }
 
 function heroAttack(){
+  ongoing1 = true;
   document.getElementsByClassName("skill-block")[0].style.display = "none";
   setTimeout(function() {
   document.getElementById("hero-image-block").classList.add("attacking");
@@ -184,6 +185,10 @@ function heroAttack(){
       monster.attack(hero);
       document.getElementById("monster-image-block").classList.remove("attacking");
       endRound();
+      setTimeout(function(){
+        ongoing1 = false;
+      },500)
+      
       if (hero.alive == false){
         finish();
       } else {
@@ -199,7 +204,7 @@ function heroAttack(){
 
 var healCount = 3;
 function heroHeal(){
-
+  ongoing2 = true;
   hero.getHurt(-30);
   healCount--;
   addRound();
@@ -214,6 +219,9 @@ function heroHeal(){
       monster.attack(hero);
       document.getElementById("monster-image-block").classList.remove("attacking");
       endRound();
+      setTimeout(function(){
+        ongoing2 = false;
+      },500)
 
       if (hero.alive == false){
         finish();
@@ -225,8 +233,22 @@ function heroHeal(){
   } else {
     finish();
   }
-  },600)
+  },500)
+}
 
+var ongoing1=false;
+var ongoing2=false;
+
+document.onkeyup = function(event){
+  
+  var key = String.fromCharCode(event.keyCode);
+  if (key == "A" && ongoing1 != true ) {
+    heroAttack();
+    
+  } else if (key == "D" && ongoing2 != true && healCount > 0) {
+    heroHeal();
+    
+  }
 }
 
 
