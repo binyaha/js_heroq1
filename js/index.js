@@ -40,12 +40,16 @@ class BaseCharacter {
     }, 50)
     } else {
       _this.id2 = setInterval(function(){
+        _this.element.getElementsByClassName("effect-image")[0].style.display = "block";
+        _this.element.getElementsByClassName("effect-image")[0].src = "images/effect/heal/"+i+".png";
         _this.element.getElementsByClassName("hurt-text")[0].innerHTML = -damage;
+
         _this.element.getElementsByClassName("hurt-text")[0].style.color = "green";
         _this.element.getElementsByClassName("hurt-text")[0].classList.add("attacked");
         i++;
         if (i>8){
           clearInterval(_this.id2);
+          _this.element.getElementsByClassName("effect-image")[0].style.display = "none";
           _this.element.getElementsByClassName("hurt-text")[0].classList.remove("attacked");
           _this.element.getElementsByClassName("hurt-text")[0].innerHTML= "";
         }
@@ -193,9 +197,15 @@ function heroAttack(){
   },1100)
 }
 
+var healCount = 3;
 function heroHeal(){
+
   hero.getHurt(-30);
-  addRound()
+  healCount--;
+  addRound();
+  if (healCount == 0){
+    document.getElementById("skill2").style.display = "none";
+  }
     setTimeout(function() {
     if (monster.alive == true){
 
