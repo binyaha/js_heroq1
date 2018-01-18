@@ -140,6 +140,11 @@
   bottom: 150px;
 }
 
+#hero-image-block    .character-block .hurt-text.attacked{
+  bottom: 150px;
+  
+}
+
 #hero-image-block .skill-block {
   position: relative;
 }

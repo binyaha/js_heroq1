@@ -28,6 +28,7 @@ class BaseCharacter {
       _this.element.getElementsByClassName("effect-image")[0].style.display = "block";
       _this.element.getElementsByClassName("effect-image")[0].src = "images/effect/blade/"+i+".png";
       _this.element.getElementsByClassName("hurt-text")[0].innerHTML = damage;
+      _this.element.getElementsByClassName("hurt-text")[0].style.color = "red";
       _this.element.getElementsByClassName("hurt-text")[0].classList.add("attacked");
       i++;
       if (i>8){
@@ -38,9 +39,17 @@ class BaseCharacter {
       }
     }, 50)
     } else {
-      _this.element.getElementsByClassName("hurt-text")[0].innerHTML = damage;
-      _this.element.getElementsByClassName("hurt-text")[0].innerHTML= "";
-
+      _this.id2 = setInterval(function(){
+        _this.element.getElementsByClassName("hurt-text")[0].innerHTML = -damage;
+        _this.element.getElementsByClassName("hurt-text")[0].style.color = "green";
+        _this.element.getElementsByClassName("hurt-text")[0].classList.add("attacked");
+        i++;
+        if (i>8){
+          clearInterval(_this.id2);
+          _this.element.getElementsByClassName("hurt-text")[0].classList.remove("attacked");
+          _this.element.getElementsByClassName("hurt-text")[0].innerHTML= "";
+        }
+      },50) 
     }
 
   }
@@ -135,6 +144,14 @@ function endRound(){
   }
 }
 
+function addRound(){
+  rounds++;
+  document.getElementById("round-num").innerHTML = rounds;
+  if (rounds < 1) {
+    finish();
+  }
+}
+
 function finish() {
   var dialog = document.getElementById("dialog")
   dialog.style.display = "block";
@@ -178,13 +195,16 @@ function heroAttack(){
 
 function heroHeal(){
   hero.getHurt(-30);
+  addRound()
     setTimeout(function() {
     if (monster.alive == true){
+
     document.getElementById("monster-image-block").classList.add("attacking");
     setTimeout(function() {
       monster.attack(hero);
       document.getElementById("monster-image-block").classList.remove("attacking");
       endRound();
+
       if (hero.alive == false){
         finish();
       } else {
